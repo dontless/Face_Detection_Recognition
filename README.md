@@ -28,8 +28,8 @@ OpenCV install, in my case this was 3.4.1.
   
   2.in face recognition reequired image dataset so, go to following link :-
   The sources of images are:
-http://www.imageprocessingplace.com/r...
-http://sipi.usc.edu/database
+     http://www.imageprocessingplace.com/r...
+       http://sipi.usc.edu/database
 # Step 3: Testing Your Camera
 * Once you have OpenCV installed in your laptop or  pc  let's test to confirm that your camera is working properly.
  
