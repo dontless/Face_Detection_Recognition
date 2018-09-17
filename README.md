@@ -1,4 +1,7 @@
 # Face_Detection_Recognition
+
+
+A real time face recognition system is capable of identifying or verifying a person from a video frame. To recognize the face in a frame, first you need to detect whether the face is present in the frame. If it is present, mark it as a region of interest (ROI), extract the ROI and process it for facial recognition.
  
  
 # Pre-requisites
@@ -160,9 +163,9 @@ these code you could find in the faceDetectionProject
  
 # To create a complete project on Face Recognition, we must work on 3 very distinct phases:-
 
-1.Face Detection and Data Gathering
-2.Train the Recognizer
-3.Face Recognition
+     1.Face Detection and Data Gathering
+     2.Train the Recognizer
+     3.Face Recognition
  
 
 
