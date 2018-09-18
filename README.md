@@ -166,6 +166,207 @@ these code you could find in the faceDetectionProject
      1.Face Detection and Data Gathering
      2.Train the Recognizer
      3.Face Recognition
+     
+     
+# start recognization of face by going through ths step :-
+    
+    
+    So now we rare ready to code the trainner,
+Just like all the other opencv script we need:
+
+      import the opencv / cv2 library,
+      
+we will need the os to accress the file list in out dataset folder,
+we also need to import the numpy library,
+and we need to import the pillow / PIL library we installed before,
+
+It will look something like this:
+
+      import cv2,os
+     import numpy as np
+     from PIL import Image
+      Python
+      
+Now we need to initialize the recognizer and the face detector
+
+     recognizer = cv2.createLBPHFaceRecognizer()
+    detector= cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+    Python
+    
+Load The Training Data
+Ok, now we will are going to create a function which will grab the training images from the dataset folder, and will also get the corresponding Ids from its file name, (remember we formatted the filename to be like User.id.samplenumber in our previous script)
+
+So I am going to name this function “getImagesAndLabels”  we need the path of the dataset folder so we will provide the folder path as argument. So the function will be like this
+
+    def getImagesAndLabels(path):Python
+    
+So now inside this function we are going to do the following
+
+Load the training images from dataset folder
+capture the faces and Id from the training images
+Put them In a List of Ids and FaceSamples  and return it
+To load the image we need to create the paths of the image
+
+    imagePaths=[os.path.join(path,f) for f in os.listdir(path)] Python
+this will get the path of each images in the folder.
+now we need to create two lists for faces and Ids to store the faces and Ids
+
+    faceSamples=[]
+    Ids=[]
+Python
+Now we will loop the images using the image path and will load those images and Ids, we will add that in your lists
+
+    for imagePath in imagePaths:
+        pilImage=Image.open(imagePath).convert('L')
+        imageNp=np.array(pilImage,'uint8')
+        Id=int(os.path.split(imagePath)[-1].split(".")[1])
+        faces=detector.detectMultiScale(imageNp)
+        for (x,y,w,h) in faces:
+            faceSamples.append(imageNp[y:y+h,x:x+w])
+            Ids.append(Id)Python
+In the above code we used used “Image.open(imagePath).convert(‘L’)” is loading the image and converting it to gray scale, but now its a PIL image we need to convert it to numpy array.
+for that we are converting it to numpy array “imageNP=np.array(pilImage,’uint8′)”.
+To get the Id we split the image path and took the first from the last part (which is “-1” in python) and that is the name of the imagefile. now here is the trick, we saved the file name in our previous program like this “User.Id.SampleNumber” so if we split this using “.” the we will get 3 token in a list “User”, “Id”, “SampleNumber”
+so to get the Id we will choone 1st index (index starts from 0)
+
+So we get:
+
+        Id=int(os.path.split(imagePath)[-1].split(".")[1])Python
+Now we are using the detector to extract the faces and append them in the faceSamples list with the Id
+
+which looks like:
+
+        for (x,y,w,h) in faces:
+            faceSamples.append(imageNp[y:y+h,x:x+w])
+            Ids.append(Id)Python
+So we are done now we just have to return that value
+
+return faceSamples,IdsPython
+
+ 
+Now the entire function will look like this
+       def getImagesAndLabels(path):
+       
+      #get the path of all the files in the folder
+        imagePaths=[os.path.join(path,f) for f in os.listdir(path)] 
+       #create empth face list
+    faceSamples=[]
+    #create empty ID list
+    Ids=[]
+    #now looping through all the image paths and loading the Ids and the images
+    for imagePath in imagePaths:
+        #loading the image and converting it to gray scale
+        pilImage=Image.open(imagePath).convert('L')
+        #Now we are converting the PIL image into numpy array
+        imageNp=np.array(pilImage,'uint8')
+        #getting the Id from the image
+        Id=int(os.path.split(imagePath)[-1].split(".")[1])
+        # extract the face from the training image sample
+        faces=detector.detectMultiScale(imageNp)
+        #If a face is there then append that in the list as well as Id of it
+        for (x,y,w,h) in faces:
+            faceSamples.append(imageNp[y:y+h,x:x+w])
+            Ids.append(Id)
+    return faceSamples,IdsPython
+Almost Done!!
+We are almost finished, now we just have to call that function and feed the data to the recognizer to train
+
+      faces,Ids = getImagesAndLabels('dataSet')
+     recognizer.train(faces, np.array(Ids))
+     recognizer.save('trainner/trainner.yml')Python
+     
+Thats it!!
+Now if we run this code it will create a “trainner.yml” file inside the trainner folder,
+We will use this file in our next post to actually recognize the faces that we trained the face recognizer to recognize,
+
+The Complete Code is given below :-
+
+      import cv2,os
+      import numpy as np
+     from PIL import Image
+
+    recognizer = cv2.createLBPHFaceRecognizer()
+     detector= cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+
+    def getImagesAndLabels(path):
+    #get the path of all the files in the folder
+    imagePaths=[os.path.join(path,f) for f in os.listdir(path)] 
+    #create empth face list
+    faceSamples=[]
+    #create empty ID list
+    Ids=[]
+    #now looping through all the image paths and loading the Ids and the images
+    for imagePath in imagePaths:
+        #loading the image and converting it to gray scale
+        pilImage=Image.open(imagePath).convert('L')
+        #Now we are converting the PIL image into numpy array
+        imageNp=np.array(pilImage,'uint8')
+        #getting the Id from the image
+        Id=int(os.path.split(imagePath)[-1].split(".")[1])
+        # extract the face from the training image sample
+        faces=detector.detectMultiScale(imageNp)
+        #If a face is there then append that in the list as well as Id of it
+        for (x,y,w,h) in faces:
+            faceSamples.append(imageNp[y:y+h,x:x+w])
+            Ids.append(Id)
+    return faceSamples,Ids
+
+
+    faces,Ids = getImagesAndLabels('dataSet')
+    recognizer.train(faces, np.array(Ids))
+    recognizer.save('trainner/trainner.yml')
+
+   
+
+ 
+
+ # Updates:
+     To make sure the trainner doesn’t take any file other that the jpg files we will add an if condition in the method
+
+
+      import cv2,os
+      import numpy as np
+     from PIL import Image
+
+         recognizer = cv2.createLBPHFaceRecognizer()
+     detector= cv2.CascadeClassifier("haarcascade_frontalface_default.xml");
+
+     def getImagesAndLabels(path):
+    #get the path of all the files in the folder
+    imagePaths=[os.path.join(path,f) for f in os.listdir(path)] 
+    #create empth face list
+    faceSamples=[]
+    #create empty ID list
+    Ids=[]
+    #now looping through all the image paths and loading the Ids and the images
+    for imagePath in imagePaths:
+
+        # Updates in Code
+        # ignore if the file does not have jpg extension :
+        if(os.path.split(imagePath)[-1].split(".")[-1]!='jpg'):
+            continue
+
+        #loading the image and converting it to gray scale
+        pilImage=Image.open(imagePath).convert('L')
+        #Now we are converting the PIL image into numpy array
+        imageNp=np.array(pilImage,'uint8')
+        #getting the Id from the image
+        Id=int(os.path.split(imagePath)[-1].split(".")[1])
+        # extract the face from the training image sample
+        faces=detector.detectMultiScale(imageNp)
+        #If a face is there then append that in the list as well as Id of it
+        for (x,y,w,h) in faces:
+            faceSamples.append(imageNp[y:y+h,x:x+w])
+            Ids.append(Id)
+    return faceSamples,Ids
+
+
+      faces,Ids = getImagesAndLabels('dataSet')
+     recognizer.train(faces, np.array(Ids))
+    recognizer.save('trainner/trainner.yml')
+
+ 
+
  
 
 
