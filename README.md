@@ -499,9 +499,9 @@ The Complete Face Recognition Code is written bellow :=>
         Id, conf = recognizer.predict(gray[y:y+h,x:x+w])
         if(conf<50):
             if(Id==1):
-                Id="Anirban"
+                Id="rahul"
             elif(Id==2):
-                Id="Sam"
+                Id="irfan"
         else:
             Id="Unknown"
         cv2.cv.PutText(cv2.cv.fromarray(im),str(Id), (x,y+h),font, 255)
