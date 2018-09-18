@@ -11,26 +11,36 @@ A real time face recognition system is capable of identifying or verifying a per
   
   -install the python from this link :   https://www.python.org/downloads/
   
-  -install numpy by typing on commnad promt :- pip install "numpy‑1.14.2+mkl‑cp36‑cp36m‑win32.whl"
+  -install numpy by typing on commnad promt :- 
+   
+                 pip install "numpy‑1.14.2+mkl‑cp36‑cp36m‑win32.whl"
   
-  -install opencv by typing on commnad promt:- pip install "opencv_python‑3.4.1+contrib‑cp36‑cp36m‑win32.whl'
+  -install opencv by typing on commnad promt:- 
+   
+                   pip install "opencv_python‑3.4.1+contrib‑cp36‑cp36m‑win32.whl'
+                   
   -Note the Successfully installed … message after each command. You can safely ignore the upgrade pip suggestion.
   
   after installation check allrequired libraries install or not for that check following in cmd :
   Start the Python interpreter and write:
   
- *import cv2
-*print(cv2.__version__)
+              import cv2
+           print(cv2.__version__)
  
-and confirm that you are running the 3.5 (or above) version
+and confirm that you are running 
+                                   the 3.5 (or above) version
+                                   
 If no error messages appear, the OpenCV is correctly installed ON YOUR PYTHON 
-OpenCV install, in my case this was 3.4.1.
+
+              OpenCV install, in my case this was 3.4.1.
   
   2.in face recognition reequired image dataset so, go to following link :-
   The sources of images are:
-     http://www.imageprocessingplace.com/r...
-       http://sipi.usc.edu/database
+  
+                                           http://www.imageprocessingplace.com/r...
+                                                  http://sipi.usc.edu/database
 # Step 3: Testing Your Camera
+
 * Once you have OpenCV installed in your laptop or  pc  let's test to confirm that your camera is working properly.
  
         import numpy as np
@@ -40,16 +50,16 @@ OpenCV install, in my case this was 3.4.1.
         cap.set(3,640) # set Width
         cap.set(4,480) # set Height
  
-    while(True):
-    ret, frame = cap.read()
-    frame = cv2.flip(frame, -1) # Flip camera vertically if your cam is not flip just comment this line 
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                while(True):
+            ret, frame = cap.read()
+            frame = cv2.flip(frame, -1) # Flip camera vertically if your cam is not flip just comment this line 
+           gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
-    cv2.imshow('frame', frame)
-    cv2.imshow('gray', gray)
+            cv2.imshow('frame', frame)
+         cv2.imshow('gray', gray)
     
-    k = cv2.waitKey(30) & 0xff
-    if k == 27: # press 'ESC' to quit
+          k = cv2.waitKey(30) & 0xff
+         if k == 27: # press 'ESC' to quit
         break
 
        cap.release()
@@ -60,13 +70,13 @@ OpenCV install, in my case this was 3.4.1.
 
 **This project was done with this fantastic "Open Source Computer Vision Library", the OpenCV
 
-# Step 4: Face Detection
-...................
-Object Detection using Haar feature-based cascade classifiers is an effective object detection method proposed by Paul Viola and Michael Jones in their paper, "Rapid Object Detection using a Boosted Cascade of Simple Features" in 2001. It is a machine learning based approach where a cascade function is trained from a lot of positive and negative images. It is then used to detect objects in other images.
+# Step 4: Face Detection:-
 
- ................
-The most common way to detect a face (or any objects), is using the "Haar Cascade classifier"
-OpenCV comes with a trainer as well as detector. If you want to train your own classifier for any object like car, planes etc. you can use OpenCV to create one. Its full details are given here: Cascade Classifier Training.
+     Object Detection using Haar feature-based cascade classifiers is an effective object detection method proposed by Paul Viola and Michael Jones in their paper, "Rapid Object Detection using a Boosted Cascade of Simple Features" in 2001. It is a machine learning based approach where a cascade function is trained from a lot of positive and negative images. It is then used to detect objects in other images.
+
+ 
+      The most common way to detect a face (or any objects), is using the "Haar Cascade classifier"
+        OpenCV comes with a trainer as well as detector. If you want to train your own classifier for any object like car, planes etc.            you can use OpenCV to create one. Its full details are given here: Cascade Classifier Training.
 
 Here we will deal with detection. OpenCV already contains many pre-trained classifiers for face, eyes, smile etc. Those XML files are stored in opencv/data/haarcascades/ folder. Let's create face and eye detector with OpenCV.
 
@@ -97,13 +107,17 @@ Then, we will set our camera and inside the loop, load our input video in graysc
        cv2.destroyAllWindows()
        
        
-   ..........
-    Here we will work with face detection. Initially, the algorithm needs a lot of positive images (images of faces) and negative images (images without faces) to train the classifier. Then we need to extract features from it. The good news is that OpenCV comes with a trainer as well as a detector. If you want to train your own classifier for any object like car, planes etc. you can use OpenCV to create one. Its full details are given here:https://docs.opencv.org/3.3.0/dc/d88/tutorial_traincascade.html
+ 
+   Here we will work with face detection. Initially, the algorithm needs a lot of positive images (images of faces) and negative images (images without faces) to train the classifier. Then we need to extract features from it. The good news is that OpenCV comes with a trainer as well as a detector. If you want to train your own classifier for any object like car, planes etc. you can use OpenCV to create one. Its full details are given here:
+   
+                      https://docs.opencv.org/3.3.0/dc/d88/tutorial_traincascade.html
     
-    ............
-    If you do not want to create your own classifier, OpenCV already contains many pre-trained classifiers for face, eyes, smile, etc. Those XML files can be download from haarcascades directory at https://github.com/opencv/opencv/tree/master/data/haarcascades
     
-    -When you compare with the last code used to test the camera, you will realize that few parts were added to it. Note the line below:
+   If you do not want to create your own classifier, OpenCV already contains many pre-trained classifiers for face, eyes, smile, etc. Those XML files can be download from haarcascades directory at
+   
+                      https://github.com/opencv/opencv/tree/master/data/haarcascades
+    
+  When you compare with the last code used to test the camera, you will realize that few parts were added to it. Note the line below:
 
             faceCascade = cv2.CascadeClassifier('Cascades/haarcascade_frontalface_default.xml')
  
