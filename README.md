@@ -182,7 +182,7 @@ these code you could find in the faceDetectionProject
      3.Face Recognition
      
      
-# start recognization of face by going through ths step :-
+# 2.start the trainner  of face by going through ths step :-
     
     
     So now we rare ready to code the trainner,
@@ -379,8 +379,137 @@ The Complete Code is given below :-
      recognizer.train(faces, np.array(Ids))
     recognizer.save('trainner/trainner.yml')
 
+ # 3.start reconize the face 
+
+Face Recognition Using OpenCV | Loading Recognizer
+In my previous trainnner  we learnt to train a recognizer using a dataset, in this post we are loading recognizer
+to see how we can use that recognizer to recognize faces.
+
+If you are following my above line of the trainner  then you already have the trained recognizer with you inside a folder named “trainner” and “trainner.yml” file inside it. Now we are going to use that training data to recognize some faces we previously trained .
+
+Lets Start By Importing The Libraries
+         
+         import cv2
+     import numpy as np 
+        Python
+    Yes that’s it, thats all we need for this projects.
+
+Now Loading Recognizer
+
+next we create a recognizer object using opencv library and load the training data (before that just save your script in the same location where your “trainner” folder is located)
+
+     recognizer = cv2.createLBPHFaceRecognizer()
+      recognizer.load('trainner/trainner.yml')
+    Python
+
+Now we will create a cascade classifier using haar cascade for face detection, assuming u have the cascade file in the same location,
+
+      cascadePath = "haarcascade_frontalface_default.xml"
+      faceCascade = cv2.CascadeClassifier(cascadePath);Python
+    
+    Now we will create the video capture object
+
+      cam = cv2.VideoCapture(0)Python
+   
+   Next we need a “font” that’s because we are going to write the name of that person in the image so we need a font for the text
+
+        font = cv2.cv.InitFont(cv2.cv.CV_FONT_HERSHEY_SIMPLEX, 1, 1, 0, 1, 1) Python
+
+Okay so the first parameter is the font name, 2nd and 3rd is the horizontal and the vertical scale,
+4rth is shear (like italic), 5th is thickness of line, 6th is line type
+
+So we have all setup
+Lets Start the main Loop
+Lets start the main loop and do the following basic steps
+
+Starts capturing frames from the camera object
+Convert it to Gray Scale
+Detect and extract faces from the images
+Use the recognizer to recognize the Id of the user
+Put predicted Id/Name and Rectangle on detected face
+    
+    while True:
+    ret, im =cam.read()
+    gray=cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+    faces=faceCascade.detectMultiScale(gray,1.2,5)
+    for(x,y,w,h) in faces:
+        cv2.rectangle(im,(x-50,y-50),(x+w+50,y+h+50),(225,0,0),2)
+        Id, conf = recognizer.predict(gray[y:y+h,x:x+w])
+        cv2.cv.PutText(cv2.cv.fromarray(im),str(Id), (x,y+h),font, 255)
+    cv2.imshow('im',im)
+    if cv2.waitKey(10) &amp; 0xFF==ord('q'):
+        breakPython
+So its pretty similar to the face detection code the only difference is the following lines
+
+        Id, conf = recognizer.predict(gray[y:y+h,x:x+w])
+        cv2.cv.PutText(cv2.cv.fromarray(im),str(Id), (x,y+h),font, 255)Python
+        
+in the above two line the recognizer is predicting the user Id and confidence of the prediction respectively
+in the next line we are writing the User ID in the screen below the face, which is (x, y+h) coordinate
+
+ 
+Just Little Finishing Touch (For Unknown Faces)
  
 
+Now with this we are pretty much done we can add some more finishing touch like its showing user Id instead of the name,
+and it cant handle unknown faces,
+
+So to add this additional features we can do the following,
+
+        Id, conf = recognizer.predict(gray[y:y+h,x:x+w])
+        if(conf<50):
+            if(Id==1):
+                Id="Anirban"
+            elif(Id==2):
+                Id="name you want to add "
+        else:
+            Id="Unknown"
+        cv2.cv.PutText(cv2.cv.fromarray(im),str(Id), (x,y+h),font, 255)Python
+ 
+
+Now Some Cleanup
+
+       cam.release()
+     cv2.destroyAllWindows()Python
+     
+Now that everything is done, we need to close the camera and the windows. and we are done!!!!
+Andyou will  see the results.
+
+Loading recognizer which is previously trained, and using it in face recognition system, names are being displayed on your screen where  there faces. 
+
+The Complete Face Recognition Code is written bellow :=>
+ 
+       import cv2
+     import numpy as np
+
+     recognizer = cv2.createLBPHFaceRecognizer()
+    recognizer.load('trainner/trainner.yml')
+    cascadePath = "haarcascade_frontalface_default.xml"
+    faceCascade = cv2.CascadeClassifier(cascadePath);
+
+
+    cam = cv2.VideoCapture(0)
+    font = cv2.cv.InitFont(cv2.cv.CV_FONT_HERSHEY_SIMPLEX, 1, 1, 0, 1, 1)
+    while True:
+    ret, im =cam.read()
+    gray=cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+    faces=faceCascade.detectMultiScale(gray, 1.2,5)
+    for(x,y,w,h) in faces:
+        cv2.rectangle(im,(x,y),(x+w,y+h),(225,0,0),2)
+        Id, conf = recognizer.predict(gray[y:y+h,x:x+w])
+        if(conf<50):
+            if(Id==1):
+                Id="Anirban"
+            elif(Id==2):
+                Id="Sam"
+        else:
+            Id="Unknown"
+        cv2.cv.PutText(cv2.cv.fromarray(im),str(Id), (x,y+h),font, 255)
+    cv2.imshow('im',im) 
+    if cv2.waitKey(10) &amp; 0xFF==ord('q'):
+        break
+     cam.release()
+     cv2.destroyAllWindows()Python
  
 
 
